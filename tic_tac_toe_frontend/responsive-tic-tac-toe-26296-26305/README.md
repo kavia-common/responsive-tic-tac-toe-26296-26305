@@ -40,6 +40,60 @@ App
      └─ Controls
 ```
 
+### Architecture Diagrams
+The following visual diagrams complement the overview with a high-level component map and the game’s state lifecycle.
+
+Caption: Component Tree showing UI composition, state, and logic groupings.
+```mermaid
+mindmap
+  root((TicTacToe App))
+    UI
+      Header(Title / Player Indicator)
+      Board
+        Row1
+        Row2
+        Row3
+        Square(x9)
+      Controls
+        ResetButton
+    State
+      currentPlayer
+      board[3x3]
+      status(winner | tie | in-progress)
+    Logic
+      handleClick(i)
+      calculateWinner(board)
+      restartGame()
+```
+
+If your environment does not support Mermaid mindmap, you can reference this alternative graph view:
+```mermaid
+graph TD
+  A[TicTacToe App] --> B[Header]
+  A --> C[Board]
+  C --> C1[Square 0-2]
+  C --> C2[Square 3-5]
+  C --> C3[Square 6-8]
+  A --> D[Controls]
+  D --> E[ResetButton]
+```
+
+Caption: State Flow diagram illustrating the lifecycle from Idle to InPlay, then to Win/Tie, and back to Idle.
+```mermaid
+stateDiagram-v2
+  [*] --> Idle
+  Idle --> InPlay: Start new game / Restart
+  InPlay --> InPlay: Player click valid square
+  InPlay --> Win: calculateWinner -> winner found
+  InPlay --> Tie: board full & no winner
+  Win --> Idle: Restart
+  Tie --> Idle: Restart
+```
+
+If Mermaid does not render:
+- Component Tree: App > Header, Board (9 Squares), Controls (ResetButton)
+- State Flow: Idle -> InPlay -> Win/Tie -> Idle
+
 ### State Management
 - Game state lives in `Game` component using React hooks (useState/useMemo).
 - Tracked state:
