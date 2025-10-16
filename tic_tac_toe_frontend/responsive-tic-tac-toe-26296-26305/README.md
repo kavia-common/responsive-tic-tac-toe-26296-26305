@@ -1,165 +1,87 @@
-# Responsive Tic Tac Toe (React)
+# Responsive Tic Tac Toe (React) — Container README
 
 [![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](#)
 [![UI](https://img.shields.io/badge/UI-Modern%20%7C%20Ocean%20Professional-blue.svg)](#)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](#)
 
-A modern, responsive Tic Tac Toe game built with React. The app provides an interactive 3x3 board, turn-based play, win/tie detection, and a clean light theme based on the Ocean Professional style.
+A modern, responsive Tic Tac Toe game built with React. This README documents the frontend container for the app.
 
-## 🚀 Features
+Preview note: The platform preview runs on port 3000 and is managed by the platform UI—no manual background process control is required from this README.
+
+## Overview
+Two players (X and O) take turns selecting squares on a 3×3 grid. The app detects wins and ties automatically and allows restarting to play again. The UI follows a clean, modern “Ocean Professional” theme.
+
+## Features
 - Start a new game
-- Interactive Tic Tac Toe board
+- Interactive 3×3 Tic Tac Toe board
 - Turn-based play for two players (X and O)
 - Automatic win and tie detection
 - Restart game
 - Responsive design (mobile → desktop)
 
-## 🧩 Architecture Overview
-This is a single-container frontend React application.
+## Tech Stack
+- React
+- Build tooling: Vite or CRA-style setup (project-dependent)
+- Styling: CSS Modules or vanilla CSS (Tailwind may be present if configured)
+- Language: JavaScript (TypeScript if configured)
+- Node.js: >= 18 recommended
 
-- Framework: React (Vite or CRA-style tooling depending on repo)
-- Platform: Web UI served via HTTP(S)
-- Container: `tic_tac_toe_frontend` running on port 3000
+## Getting Started
 
-### Component Structure (Typical)
-- App: Shell layout; composes the game and header/footer.
-- Game: Owns game state, orchestrates gameplay, and communicates with board.
-- Board: Renders a 3x3 grid of squares; raises click events to parent.
-- Square: Stateless button-like cell.
-- StatusBar: Displays current player, win/tie status.
-- Controls: Reset/New Game actions.
+### Prerequisites
+- Node.js >= 18
+- npm (bundled with Node)
 
-A possible tree:
+### Installation
 ```
-App
- ├─ Header
- └─ Game
-     ├─ StatusBar
-     ├─ Board
-     │   ├─ Square x9
-     └─ Controls
+npm install
 ```
 
-### Architecture Diagrams
-The following visual diagrams complement the overview with a high-level component map and the game’s state lifecycle.
+### Environment Variables
+- None are required currently.
+- If variables are added later, they will be documented here and mirrored in a `.env.example`.
 
-Caption: Component Tree showing UI composition, state, and logic groupings.
-```mermaid
-mindmap
-  root((TicTacToe App))
-    UI
-      Header(Title / Player Indicator)
-      Board
-        Row1
-        Row2
-        Row3
-        Square(x9)
-      Controls
-        ResetButton
-    State
-      currentPlayer
-      board[3x3]
-      status(winner | tie | in-progress)
-    Logic
-      handleClick(i)
-      calculateWinner(board)
-      restartGame()
+### Scripts
+Scripts may vary by exact template. Common commands:
+- Development:
+  ```
+  npm run dev
+  ```
+  Starts a local dev server (typically http://localhost:3000).
+- Build:
+  ```
+  npm run build
+  ```
+  Creates a production build.
+- Preview (if available):
+  ```
+  npm run preview
+  ```
+  Serves the production build locally.
+- Test (if available):
+  ```
+  npm test
+  ```
+- Lint (if available):
+  ```
+  npm run lint
+  ```
+- Format (if available):
+  ```
+  npm run format
+  ```
+
+## Project Structure
+This container sits under the project workspace:
+```
+responsive-tic-tac-toe-26296-26305/
+  README.md
+  tic_tac_toe_frontend/
+    responsive-tic-tac-toe-26296-26305/
+      README.md   # You are here
 ```
 
-If your environment does not support Mermaid mindmap, you can reference this alternative graph view:
-```mermaid
-graph TD
-  A[TicTacToe App] --> B[Header]
-  A --> C[Board]
-  C --> C1[Square 0-2]
-  C --> C2[Square 3-5]
-  C --> C3[Square 6-8]
-  A --> D[Controls]
-  D --> E[ResetButton]
-```
-
-Caption: State Flow diagram illustrating the lifecycle from Idle to InPlay, then to Win/Tie, and back to Idle.
-```mermaid
-stateDiagram-v2
-  [*] --> Idle
-  Idle --> InPlay: Start new game / Restart
-  InPlay --> InPlay: Player click valid square
-  InPlay --> Win: calculateWinner -> winner found
-  InPlay --> Tie: board full & no winner
-  Win --> Idle: Restart
-  Tie --> Idle: Restart
-```
-
-If Mermaid does not render:
-- Component Tree: App > Header, Board (9 Squares), Controls (ResetButton)
-- State Flow: Idle -> InPlay -> Win/Tie -> Idle
-
-### State Management
-- Game state lives in `Game` component using React hooks (useState/useMemo).
-- Tracked state:
-  - `board`: string[9] with values 'X' | 'O' | null
-  - `isXNext`: boolean
-  - `winner`: 'X' | 'O' | null (derived)
-  - `isTie`: boolean (derived if no winner and board full)
-- State updates are immutable: clicking a Square triggers a parent handler, which guards against overwriting filled squares or playing after game end.
-
-### Game Logic
-- Win detection checks all 8 lines (rows/cols/diagonals).
-- Tie detection when no nulls remain and no winner.
-- Restart resets `board` and `isXNext`.
-
-ASCII diagram of winning lines:
-```
-Indices:   0 | 1 | 2      Wins:
-          ---+---+---     - Rows:    [0,1,2], [3,4,5], [6,7,8]
-           3 | 4 | 5      - Columns: [0,3,6], [1,4,7], [2,5,8]
-          ---+---+---     - Diags:   [0,4,8], [2,4,6]
-           6 | 7 | 8
-```
-
-### Rendering Flow
-1. User clicks a Square
-2. Game validates move and updates board
-3. Derived state recomputed (winner/tie)
-4. StatusBar shows Player X/O or Winner/Tie
-5. Controls allow Restart
-
-Sequence (simplified):
-```
-[Square.onClick] → [Game.handleMove]
-    ├─ guard: ignore if winner or cell filled
-    ├─ next board state (immutable copy)
-    ├─ compute winner / tie from new board
-    └─ setState({ board, isXNext, winner, isTie }) → re-render
-```
-
-## 🎨 Design & Theme
-Style guide: Ocean Professional (Modern)
-- Primary: #2563EB
-- Secondary/Success: #F59E0B
-- Error: #EF4444
-- Background: #f9fafb
-- Surface: #ffffff
-- Text: #111827
-- Gradient accents: from-blue-500/10 to-gray-50
-
-UI guidelines:
-- Light, modern aesthetic
-- Subtle shadows, rounded corners
-- Smooth transitions on hover/focus
-- Accent highlights for interactive elements
-
-## 📱 Responsiveness
-- Grid scales fluidly with viewport; squares maintain aspect ratio.
-- Layout is centered with max-width constraints and padding.
-- Touch-friendly hit targets and accessible focus states.
-
-Approach:
-- Use CSS grid or flexbox for the 3x3 layout.
-- Maintain square aspect ratio via intrinsic ratio (e.g., padding-top) or aspect-ratio property.
-- Typography scales slightly across breakpoints.
-
-## 🗂️ Suggested Folder Structure
+A typical React app layout for this project:
 ```
 src/
   components/
@@ -171,70 +93,69 @@ src/
     logic.js        # winner/tie helpers
     constants.js
   styles/
-    theme.css       # color variables from style guide
+    theme.css       # theme variables from style guide
     globals.css
   App.jsx
   main.jsx
 public/
-README.md
 ```
 
 Notes:
-- Keep game rules in `game/logic.js` for easy unit testing.
-- Keep presentation and interaction in `components/`.
+- Game rules and helpers in `game/` simplify unit testing.
+- Keep presentational pieces in `components/`.
 
-## 🔧 Scripts
-Common scripts (your tooling may vary):
-- `npm install` – install dependencies
-- `npm run dev` – start local dev server (preview typically on http://localhost:3000)
-- `npm run build` – production build
-- `npm run preview` – preview production build
+## Styling and Theme
+Ocean Professional — Modern
+- Primary: #2563EB
+- Secondary/Success: #F59E0B
+- Error: #EF4444
+- Background: #f9fafb
+- Surface: #ffffff
+- Text: #111827
+- Gradient accents: from-blue-500/10 to-gray-50
 
-## ⚙️ Environment Variables
-- None required for current functionality.
-- If added in the future, document them here and in `.env.example`.
+Guidelines:
+- Use primary blue for interactive accents (buttons, active states, focus rings).
+- Use secondary amber for complementary highlights and success cues.
+- Subtle shadows and rounded corners; smooth transitions for hover/focus.
+- Consider subtle gradient backgrounds for cards/surfaces.
 
-## ▶️ Running Locally
-1. Ensure Node.js LTS installed
-2. Install: `npm install`
-3. Dev server: `npm run dev`
-4. Open http://localhost:3000
+## Gameplay Notes
+- How to play: Click an empty square to place your mark. X starts by default; turns alternate automatically.
+- Win detection: Rows, columns, and diagonals (8 total lines).
+- Tie detection: Triggers when the board is full and no winner exists.
+- Reset: Use the Restart/New Game control to reset the board and start over.
 
-Note: In this workspace, previews may be managed automatically by your environment. You can start/stop previews from your UI; no manual process is needed in code.
+## Development Notes
+- Local development: `npm run dev` and open http://localhost:3000.
+- Platform preview: Managed automatically on port 3000—use the platform UI to open/close previews.
+- Hot reload: Source changes should hot-reload in development.
+- Linting/Formatting: If configured, use `npm run lint` and `npm run format`.
 
-## ✅ Accessibility
-- Semantic buttons for squares with ARIA labels (e.g., "Square 1, value X")
-- Focus outlines and sufficient color contrast
-- Keyboard interaction supported for moves and restart
+## Testing
+- If tests are configured, run:
+  ```
+  npm test
+  ```
+- Suggested coverage:
+  - `game/logic.js` (winner/tie logic)
+  - Board and Square interactions (click handling, guarding invalid moves)
+  - Status rendering for in-progress, winner, and tie states
+- If not configured yet, consider Jest/Vitest and React Testing Library.
 
-## 🧪 Testing (Optional)
-- Unit test `game/logic.js` (win/tie detection)
-- Component tests for Board/Square interactions
-- Snapshot tests for UI states (in-progress, win, tie)
-
-Example test ideas:
-- computeWinner returns X for [0,1,2]
-- computeWinner returns null for no winning line
-- clicking occupied square does not change state
-- restarting clears board and sets `isXNext` true
-
-## 🔮 Future Improvements
+## Roadmap / Improvements
+- AI opponent (minimax)
 - Move history and time travel
-- Scoreboard across rounds
-- Animations for winning line
-- Single-player vs Computer (minimax)
-- Theming switch (light/dark)
+- Score tracking across rounds
+- Accessibility enhancements (ARIA, keyboard polish)
+- Visual polish (winning line animation; optional sounds)
+- Theme toggle (light/dark)
 
-## 🛠️ Tech Stack
-- React
-- CSS Modules/Tailwind (project-dependent)
-- JavaScript (or TypeScript if configured)
-
-## 🤝 Contribution
+## Contributing
 - Use conventional commits (e.g., feat:, fix:, chore:)
 - Keep components small and focused
-- Prefer pure functions in `game/`
-- Add or update tests for new logic
+- Favor pure functions in `game/` for logic
+- Add or update tests alongside feature changes
 
-## 📄 License
-MIT (or add your preferred license)
+## License
+MIT (or specify your preferred license)
