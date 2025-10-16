@@ -1,0 +1,19 @@
+{
+  "name": "tic_tac_toe_frontend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Responsive Tic Tac Toe frontend built with Vite + React using the Ocean Professional theme.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --port 3000 --strictPort"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
