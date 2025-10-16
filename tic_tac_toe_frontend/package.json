@@ -1,0 +1,20 @@
+{
+  "name": "tic_tac_toe_frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "build": "vite build",
+    "preview": "vite preview --port 3000",
+    "test": "echo \"No tests configured for React components in this container. Logic tests exist in src/game/logic.test.js and can run if a test runner is added (Jest/Vitest).\" && exit 0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "@vitejs/plugin-react": "^4.3.1"
+  }
+}
