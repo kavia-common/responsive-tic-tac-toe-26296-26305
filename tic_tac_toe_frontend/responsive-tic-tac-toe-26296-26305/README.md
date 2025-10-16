@@ -79,30 +79,24 @@ responsive-tic-tac-toe-26296-26305/
   tic_tac_toe_frontend/
     responsive-tic-tac-toe-26296-26305/
       README.md   # You are here
-```
-
-A typical React app layout for this project:
-```
-src/
-  components/
-    Board.jsx
-    Square.jsx
-    StatusBar.jsx
-    Controls.jsx
-  game/
-    logic.js        # winner/tie helpers
-    constants.js
-  styles/
-    theme.css       # theme variables from style guide
-    globals.css
-  App.jsx
-  main.jsx
-public/
+    src/
+      App.jsx
+      index.jsx
+      styles.css
+      components/
+        Board.jsx
+        Square.jsx
+        StatusBar.jsx
+        Controls.jsx
+      game/
+        logic.js
+        constants.js
 ```
 
 Notes:
 - Game rules and helpers in `game/` simplify unit testing.
 - Keep presentational pieces in `components/`.
+- Minimal tests added for `game/logic.js` (works with Jest/Vitest).
 
 ## Styling and Theme
 Ocean Professional — Modern

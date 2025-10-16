@@ -116,12 +116,18 @@ body {
   cursor: pointer;
   transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
   box-shadow: var(--shadow-sm);
+  outline: none;
 }
 
 .square:hover {
   transform: translateY(-2px);
   border-color: var(--color-primary);
   box-shadow: 0 8px 20px rgba(37,99,235,0.12);
+}
+
+.square:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
 }
 
 .square:active {
@@ -131,6 +137,11 @@ body {
 .square.filled {
   background: #f3f4f6;
   color: #1f2937;
+}
+
+.square:disabled {
+  cursor: not-allowed;
+  opacity: 0.9;
 }
 
 /* Controls */
